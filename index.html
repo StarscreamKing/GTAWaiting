@@ -97,74 +97,87 @@
       <audio id="bgm" src="Grand%20Theft%20Waiting.mp3" preload="auto" loop controls></audio>
     </div>
 
-    <script>
-      const LABELS = [
-        "Epstein files released",
-        "EA releases a game without microtransactions",
-        "Apple makes a phone you can fix yourself",
-        "Shiba Inu hits the moon",
-        "Something beat a Jet 2 Holiday",
-        "Leo has a girlfriend older than 27",
-        "Vince returns to WWE",
-        "Land Rover makes a reliable car",
-        "North Korea wins Eurovision",
-        "New season of Firefly",
-        "Netflix adds Are You Still Watching? as a paid feature",
-        "Twitter (X) rebrands back to Twitter because no one calls it X",
-        "GTA VI released before Half-Life 3",
-        "Angela Rayner opens an OnlyFans",
-        "Zuckerberg and Musk actually have a cage fight",
-        "Elon Musk names his next kid something pronounceable, i.e. Keith",
-        "Disney sues itself and wins",
-        "FBI admits “X-Files” was actually a documentary",
-        "Logan Paul actually becomes a good person",
-        "Bonnie Blue identifies as a man...",
-        "Linkedin rebrands as EgoHUB",
-        "Facebook values privacy",
-        "Google admits incognito mode never worked",
-        "KFC runs out of chicken...again",
-        "Apple releases iPhone with headphone jack “for nostalgia”"
-      ];
+<script>
+  const LABELS = [
+    "Epstein files released",
+    "EA releases a game without microtransactions",
+    "Apple makes a phone you can fix yourself",
+    "Shiba Inu hits the moon",
+    "Something beat a Jet 2 Holiday",
+    "Leo has a girlfriend older than 27",
+    "Vince returns to WWE",
+    "Land Rover makes a reliable car",
+    "North Korea wins Eurovision", // special case
+    "New season of Firefly",
+    "Netflix adds Are You Still Watching? as a paid feature",
+    "Twitter (X) rebrands back to Twitter because no one calls it X",
+    "GTA VI released before Half-Life 3",
+    "Angela Rayner opens an OnlyFans",
+    "Zuckerberg and Musk actually have a cage fight",
+    "Elon Musk names his next kid something pronounceable, i.e. Keith",
+    "Disney sues itself and wins",
+    "FBI admits “X-Files” was actually a documentary",
+    "Logan Paul actually becomes a good person",
+    "Bonnie Blue identifies as a man...",
+    "Linkedin rebrands as EgoHUB",
+    "Facebook values privacy",
+    "Google admits incognito mode never worked",
+    "KFC runs out of chicken...again",
+    "Apple releases iPhone with headphone jack “for nostalgia”"
+  ];
 
-      const grid = document.getElementById("grid");
-      const audio = document.getElementById("bgm");
+  const grid = document.getElementById("grid");
+  const audio = document.getElementById("bgm");
 
-      // Build the 25 tiles from LABELS
-      LABELS.forEach((text) => {
-        const div = document.createElement("div");
-        div.className = "cell";
+  // Build the 25 tiles from LABELS
+  LABELS.forEach((text) => {
+    const div = document.createElement("div");
+    div.className = "cell";
 
-        const btn = document.createElement("button");
-        btn.setAttribute("role", "button");
-        btn.setAttribute("aria-pressed", "false");
-        btn.addEventListener("click", () => toggle(div, btn));
-        btn.addEventListener("keydown", (e) => {
-          if (e.key === " " || e.key === "Enter") {
-            e.preventDefault();
-            toggle(div, btn);
-          }
-        });
+    const btn = document.createElement("button");
+    btn.setAttribute("role", "button");
+    btn.setAttribute("aria-pressed", "false");
 
-        const label = document.createElement("div");
-        label.className = "label";
-        label.textContent = text;
-
-        div.appendChild(btn);
-        div.appendChild(label);
-        grid.appendChild(div);
-      });
-
-      function toggle(cell, btn) {
-        const marked = !cell.classList.contains("marked");
-        cell.classList.toggle("marked", marked);
-        btn.setAttribute("aria-pressed", String(marked));
-
-        if (audio && audio.paused) {
-          audio.play().catch((err) => {
-            console.log("Autoplay blocked until user interacts:", err);
-          });
-        }
+    btn.addEventListener("click", () => handleClick(text, div, btn));
+    btn.addEventListener("keydown", (e) => {
+      if (e.key === " " || e.key === "Enter") {
+        e.preventDefault();
+        handleClick(text, div, btn);
       }
-    </script>
-  </body>
+    });
+
+    const label = document.createElement("div");
+    label.className = "label";
+    label.textContent = text;
+
+    div.appendChild(btn);
+    div.appendChild(label);
+    grid.appendChild(div);
+  });
+
+  function handleClick(text, cell, btn) {
+    // Special case for North Korea Eurovision button
+    if (text === "North Korea wins Eurovision") {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+      window.open("https://www.youtube.com/watch?v=_FkHt3KIqCc", "_blank");
+      return;
+    }
+
+    // Default behavior (toggle marked + play audio)
+    const marked = !cell.classList.contains("marked");
+    cell.classList.toggle("marked", marked);
+    btn.setAttribute("aria-pressed", String(marked));
+
+    if (audio && audio.paused) {
+      audio.play().catch((err) => {
+        console.log("Autoplay blocked until user interacts:", err);
+      });
+    }
+  }
+</script>
+</body>
 </html>
+
