@@ -86,6 +86,15 @@ document.addEventListener("DOMContentLoaded", () => {
     "GTA VI released before Half-Life 3": "./Images/gta.gif",
   };
 
+    // ----- Preload all flash images -----
+  (function preloadImages(paths) {
+    Object.values(paths).forEach(src => {
+      const img = new Image();
+      img.src = src;
+      img.onerror = () => console.error("Failed to preload:", src);
+    });
+  })(FLASH_IMAGES);
+
   const grid = document.getElementById("grid");
   const audio = document.getElementById("bgm");
 
