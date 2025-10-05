@@ -56,34 +56,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Which boxes trigger a flash (label -> image path)
   const FLASH_IMAGES = {
-    "Shiba Inu hits the moon": "images/joke7.gif",
-    "Land Rover makes a reliable car": "images/Landrover.png",
-    "Linkedin rebrands as EgoHUB": "images/Egohub1.png",
-    "Epstein files released": "images/julie.gif",
-    "KFC runs out of chicken...again": "images/kfc.png",
-    "Angela Rayner opens an OnlyFans": "images/Stampduty.png",
-    "Zuckerberg and Musk actually have a cage fight": "images/cagegith.png",
-    "Leo has a girlfriend older than 27": "images/Leo84.png",
+    "Shiba Inu hits the moon": "Images/joke7.gif",
+    "Land Rover makes a reliable car": "Images/Landrover.png",
+    "Linkedin rebrands as EgoHUB": "Images/Egohub1.png",
+    "Epstein files released": "Images/julie.gif",
+    "KFC runs out of chicken...again": "Images/kfc.png",
+    "Angela Rayner opens an OnlyFans": "Images/Stampduty.png",
+    "Zuckerberg and Musk actually have a cage fight": "Images/cagegith.png",
+    "Leo has a girlfriend older than 27": "Images/Leo84.png",
     "Netflix adds Are You Still Watching? as a paid feature":
-      "images/Notflix.png",
+      "Images/Notflix.png",
     "Elon Musk names his next kid something pronounceable, i.e. Keith":
-      "images/keith.png",
-    "Something beat a Jet 2 Holiday": "images/rick.gif",
-    "Vince returns to WWE": "images/vince.gif",
-    "EA releases a game without microtransactions": "images/joke1.gif",
-    "Apple makes a phone you can fix yourself": "images/jobs.gif",
-    "New season of Firefly": "images/joke2.gif",
-    "Logan Paul actually becomes a good person": "images/joke3.gif",
-    "Disney sues itself and wins": "images/disney.gif",
+      "Images/keith.png",
+    "Something beat a Jet 2 Holiday": "Images/rick.gif",
+    "Vince returns to WWE": "Images/vince.gif",
+    "EA releases a game without microtransactions": "Images/joke1.gif",
+    "Apple makes a phone you can fix yourself": "Images/jobs.gif",
+    "New season of Firefly": "Images/joke2.gif",
+    "Logan Paul actually becomes a good person": "Images/joke3.gif",
+    "Disney sues itself and wins": "Images/disney.gif",
     "Apple releases iPhone with headphone jack “for nostalgia”":
-      "images/joke4.gif",
-    "FBI admits “X-Files” was actually a documentary": "images/joke10.gif",
-    "Bonnie Blue identifies as a man...": "images/joke5.gif",
+      "Images/joke4.gif",
+    "FBI admits “X-Files” was actually a documentary": "Images/joke10.gif",
+    "Bonnie Blue identifies as a man...": "Images/joke5.gif",
     "Twitter (X) rebrands back to Twitter because no one calls it X":
-      "images/joke8.gif",
-    "Google admits incognito mode never worked": "images/joke6.gif",
-    "Facebook values privacy": "images/zucker.gif",
-    "GTA VI released before Half-Life 3": "images/gta.gif",
+      "Images/joke8.gif",
+    "Google admits incognito mode never worked": "Images/joke6.gif",
+    "Facebook values privacy": "Images/zucker.gif",
+    "GTA VI released before Half-Life 3": "Images/gta.gif",
   };
 
   const grid = document.getElementById("grid");
