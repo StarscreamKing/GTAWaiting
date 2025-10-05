@@ -4,180 +4,33 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>GTA Waiting Bingo</title>
-    <style>
-      :root {
-        --bg: #0f172a;
-        --card: #0b1220;
-        --border: #1f2937;
-        --text: #e5e7eb;
-        --accent: #22d3ee;
-      }
-      * { box-sizing: border-box; }
-      body {
-        margin: 0;
-        min-height: 100svh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: var(--bg);
-        color: var(--text);
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-        gap: 20px;
-        padding: 16px;
-      }
-      h1 {
-        margin: 0;
-        font-size: clamp(24px, 5vw, 40px);
-        letter-spacing: 1px;
-        text-align: center;
-      }
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        grid-template-rows: repeat(5, 1fr);
-        gap: 8px;
-        background: linear-gradient(180deg, #0d1424, #080e19);
-        padding: 12px;
-        border-radius: 16px;
-        border: 1px solid var(--border);
-        box-shadow: inset 0 1px 0 #ffffff10, 0 8px 30px #0006;
-        width: min(95vw, 720px);
-        aspect-ratio: 1 / 1; /* keep the whole grid perfectly square */
-      }
-      .cell {
-        position: relative;
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        background: linear-gradient(180deg, #0f172a 0%, #0b1220 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 6px;
-        text-align: center;
-        font-weight: 700;
-        font-size: clamp(12px, 1.2vw, 18px);
-        user-select: none;
-        overflow: hidden;
-      }
-      .cell button {
-        all: unset;
-        position: absolute;
-        inset: 0;
-        border-radius: inherit;
-        cursor: pointer;
-      }
-      .cell .label {
-        pointer-events: none;
-        word-break: break-word;
-        line-height: 1.2;
-      }
-      .cell:hover { outline: 2px solid #94a3b833; }
-      .cell.marked {
-        outline: 2px solid var(--accent);
-        background: linear-gradient(180deg, #0b2330, #081520);
-      }
-      .cell.marked::after {
-        content: "✓";
-        position: absolute;
-        right: 8px;
-        bottom: 8px;
-        font-size: clamp(16px, 3vw, 22px);
-        color: var(--accent);
-      }
-      .audio-wrap { width: min(95vw, 720px); }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>GTA Waiting Bingo</h1>
+    <div class="container">
+      <h1>GTA 6 Waiting Bingo</h1>
 
-    <div class="grid" id="grid" aria-label="Bingo grid 5 by 5" aria-live="polite"></div>
+      <div id="countdown"></div>
 
-    <div class="audio-wrap">
-      <audio id="bgm" src="Grand%20Theft%20Waiting.mp3" preload="auto" loop controls></audio>
+      <div
+        class="grid"
+        id="grid"
+        aria-label="Bingo grid 5 by 5"
+        aria-live="polite"
+      ></div>
+
+      <div class="audio-wrap">
+        <audio
+          id="bgm"
+          src="Grand%20Theft%20Waiting.mp3"
+          preload="auto"
+          loop
+          controls
+        ></audio>
+
+        <audio id="sfx-pencil" src="pencil.mp3" preload="auto"></audio>
+      </div>
     </div>
-
-<script>
-  const LABELS = [
-    "Epstein files released",
-    "EA releases a game without microtransactions",
-    "Apple makes a phone you can fix yourself",
-    "Shiba Inu hits the moon",
-    "Something beat a Jet 2 Holiday",
-    "Leo has a girlfriend older than 27",
-    "Vince returns to WWE",
-    "Land Rover makes a reliable car",
-    "North Korea wins Eurovision", // special case
-    "New season of Firefly",
-    "Netflix adds Are You Still Watching? as a paid feature",
-    "Twitter (X) rebrands back to Twitter because no one calls it X",
-    "GTA VI released before Half-Life 3",
-    "Angela Rayner opens an OnlyFans",
-    "Zuckerberg and Musk actually have a cage fight",
-    "Elon Musk names his next kid something pronounceable, i.e. Keith",
-    "Disney sues itself and wins",
-    "FBI admits “X-Files” was actually a documentary",
-    "Logan Paul actually becomes a good person",
-    "Bonnie Blue identifies as a man...",
-    "Linkedin rebrands as EgoHUB",
-    "Facebook values privacy",
-    "Google admits incognito mode never worked",
-    "KFC runs out of chicken...again",
-    "Apple releases iPhone with headphone jack “for nostalgia”"
-  ];
-
-  const grid = document.getElementById("grid");
-  const audio = document.getElementById("bgm");
-
-  // Build the 25 tiles from LABELS
-  LABELS.forEach((text) => {
-    const div = document.createElement("div");
-    div.className = "cell";
-
-    const btn = document.createElement("button");
-    btn.setAttribute("role", "button");
-    btn.setAttribute("aria-pressed", "false");
-
-    btn.addEventListener("click", () => handleClick(text, div, btn));
-    btn.addEventListener("keydown", (e) => {
-      if (e.key === " " || e.key === "Enter") {
-        e.preventDefault();
-        handleClick(text, div, btn);
-      }
-    });
-
-    const label = document.createElement("div");
-    label.className = "label";
-    label.textContent = text;
-
-    div.appendChild(btn);
-    div.appendChild(label);
-    grid.appendChild(div);
-  });
-
-  function handleClick(text, cell, btn) {
-    // Special case for North Korea Eurovision button
-    if (text === "North Korea wins Eurovision") {
-      if (audio) {
-        audio.pause();
-        audio.currentTime = 0;
-      }
-      window.open("https://www.youtube.com/watch?v=_FkHt3KIqCc", "_blank");
-      return;
-    }
-
-    // Default behavior (toggle marked + play audio)
-    const marked = !cell.classList.contains("marked");
-    cell.classList.toggle("marked", marked);
-    btn.setAttribute("aria-pressed", String(marked));
-
-    if (audio && audio.paused) {
-      audio.play().catch((err) => {
-        console.log("Autoplay blocked until user interacts:", err);
-      });
-    }
-  }
-</script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
-
