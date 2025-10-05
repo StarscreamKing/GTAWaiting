@@ -64,8 +64,14 @@ h1 {
   cursor: pointer;
 }
 .cell .label {
+  display: block;          /* give it a real box */
+  width: 100%;             /* match the cell width */
+  max-height: 100%;        /* don’t overflow vertically */
+  overflow: hidden;        /* clip when at min size */
   pointer-events: none;
   word-break: break-word;
+  overflow-wrap: anywhere;
+  hyphens: auto;
   line-height: 1.2;
 }
 .cell:hover {
