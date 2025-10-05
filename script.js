@@ -51,8 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
     "Twitter (X) rebrands back to Twitter because no one calls it X",
     "GTA VI released before Half-Life 3",
     "Angela Rayner opens an OnlyFans",
-    "Zuckerberg and Musk actually have a cage fight",
-    "Elon Musk names his next kid something pronounceable, i.e. Keith",
+    "Zuckerberg and Musk cage fight",
+    "Elon Musk names his next kid Keith",
     "Disney sues itself and wins",
     "FBI admits “X-Files” was actually a documentary",
     "Logan Paul actually becomes a good person",
@@ -72,11 +72,11 @@ document.addEventListener("DOMContentLoaded", () => {
     "Epstein files released": "./Images/julie.gif",
     "KFC runs out of chicken...again": "./Images/KFC.png",
     "Angela Rayner opens an OnlyFans": "./Images/Stampduty.png",
-    "Zuckerberg and Musk actually have a cage fight": "./Images/Cagegith.png",
+    "Zuckerberg and Musk actually cage fight": "./Images/Cagegith.png",
     "Leo has a girlfriend older than 27": "./Images/Leo84.png",
     "Netflix adds Are You Still Watching? as a paid feature":
       "./Images/Notflix.png",
-    "Elon Musk names his next kid something pronounceable, i.e. Keith":
+    "Elon Musk names his next kid Keith":
       "./Images/Keith.png",
     "Something beat a Jet 2 Holiday": "./Images/Rick.gif",
     "Vince returns to WWE": "./Images/Vince.gif",
