@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Which boxes trigger a flash (label -> image path)
   const FLASH_IMAGES = {
-    "Shiba Inu hits the moon": "Images/joke7.gif",
+    "Shiba Inu hits the moon": "main/Images/joke7.gif",
     "Land Rover makes a reliable car": "main/Images/Landrover.png",
     "Linkedin rebrands as EgoHUB": "main/Images/Egohub1.png",
     "Epstein files released": "main/Images/julie.gif",
