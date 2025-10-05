@@ -25,6 +25,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }, 1000);
 
+  // ---------- Flash timing controls ----------
+  const FLASH_VISIBLE_MS = 4500;    // default visible time
+  const FLASH_HIDE_ANIM_MS = 250;   // must match your CSS transition
+
+  // Optional: per-image custom durations (override the default)
+  const FLASH_DURATIONS = {
+    "./Images/Rick.gif": 6000,
+    "./Images/Stampduty.png": 5000
+  };
+
   // ----- Bingo grid -----
   const LABELS = [
     "Epstein files released",
@@ -86,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "GTA VI released before Half-Life 3": "./Images/gta.gif",
   };
 
-    // ----- Preload all flash images -----
+  // ----- Preload all flash images -----
   (function preloadImages(paths) {
     Object.values(paths).forEach(src => {
       const img = new Image();
@@ -103,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const div = document.createElement("div");
       div.className = "cell";
 
-      // ADD THIS: strike overlay for the X
+      // strike overlay for the X
       const strike = document.createElement("div");
       strike.className = "strike";
       div.appendChild(strike);
@@ -172,6 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Create the overlay once and reuse it
   const flash = createFlashOverlay();
+  let flashTimer = null; // so we can restart timing if user clicks fast
 
   function createFlashOverlay() {
     const el = document.createElement("div");
@@ -182,6 +193,11 @@ document.addEventListener("DOMContentLoaded", () => {
     img.alt = ""; // decorative; set a real alt if this is meaningful content
     el.appendChild(img);
 
+    // Log load errors to catch bad paths
+    img.addEventListener("error", () => {
+      console.error("Failed to load image:", img.src);
+    });
+
     // Click anywhere to dismiss early
     el.addEventListener("click", hideFlash);
 
@@ -189,26 +205,47 @@ document.addEventListener("DOMContentLoaded", () => {
     return el;
   }
 
-  function showFlash(src) {
+  // Show with decode + restartable timer + custom duration support
+  async function showFlash(src) {
     const img = flash.querySelector("img");
+
+    // If currently visible or fading, cancel the previous cycle
+    if (flashTimer) {
+      clearTimeout(flashTimer);
+      flashTimer = null;
+    }
+    flash.classList.remove("fadeout", "show");
+
+    // Load + decode before showing to avoid white-box flicker
     img.src = src;
-    flash.classList.remove("fadeout");
+    try {
+      if (img.decode) {
+        await img.decode();
+      }
+    } catch (_) {
+      // Some browsers may throw on decode; safe to proceed anyway
+    }
+
+    // Show
     flash.classList.add("show");
 
-    // Auto-hide after ~900ms visible
-    const VISIBLE_MS = 2000;
-    const HIDE_ANIM_MS = 200;
+    // Decide how long to keep visible for this image
+    const visibleMs = FLASH_DURATIONS[src] ?? FLASH_VISIBLE_MS;
 
-    setTimeout(() => {
+    // Stay visible, then fade out, then clear
+    flashTimer = setTimeout(() => {
       flash.classList.add("fadeout");
-      setTimeout(() => hideFlash(), HIDE_ANIM_MS);
-    }, VISIBLE_MS);
+      setTimeout(() => hideFlash(), FLASH_HIDE_ANIM_MS);
+    }, visibleMs);
   }
 
   function hideFlash() {
     const img = flash.querySelector("img");
     flash.classList.remove("show", "fadeout");
-    // Clear src so it unloads if large
-    img.src = "";
+    img.src = ""; // free memory for big GIFs/PNGs
+    if (flashTimer) {
+      clearTimeout(flashTimer);
+      flashTimer = null;
+    }
   }
 });
