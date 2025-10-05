@@ -1,0 +1,220 @@
+:root {
+  --bg: #0f172a;
+  --card: #0b1220;
+  --border: #1f2937;
+  --text: #e5e7eb;
+  --accent: #22d3ee;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg) url("bg.png") center / cover no-repeat fixed;
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+    sans-serif;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(24px, 5vw, 40px);
+  letter-spacing: 1px;
+  text-align: center;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 8px;
+  background: linear-gradient(180deg, #0d1424, #080e19);
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: inset 0 1px 0 #ffffff10, 0 8px 30px #0006;
+  /* width: min(95vw, 720px); */
+  width: 100%;
+  max-width: 720px;
+  aspect-ratio: 1 / 1; /* keep the whole grid perfectly square */
+}
+.cell {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: linear-gradient(180deg, #0f172a 0%, #0b1220 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  text-align: center;
+  font-weight: 700;
+  font-size: clamp(12px, 1.2vw, 18px);
+  user-select: none;
+  overflow: hidden;
+}
+.cell button {
+  all: unset;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  cursor: pointer;
+}
+.cell .label {
+  pointer-events: none;
+  word-break: break-word;
+  line-height: 1.2;
+}
+.cell:hover {
+  outline: 2px solid #94a3b833;
+}
+.cell.marked {
+  outline: 2px solid var(--accent);
+  background: linear-gradient(180deg, #0b2330, #081520);
+}
+.cell.marked::after {
+  content: "✓";
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  font-size: clamp(16px, 3vw, 22px);
+  color: var(--accent);
+}
+.audio-wrap {
+  width: 100%;
+  max-width: 720px;
+  margin-top: 20px;
+}
+
+#countdown {
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.container {
+  background: rgba(15, 23, 42, 0.6); /* semi-transparent */
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  max-width: 780px;
+  width: 95%; /* scales on small screens */
+  text-align: center;
+}
+
+/* Pencil strike overlay container */
+.cell {
+  position: relative;
+  overflow: hidden;
+}
+.cell .strike {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Two diagonal lines that animate via transform */
+.cell .strike::before,
+.cell .strike::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 140%; /* long enough to span corner-to-corner */
+  height: 2px; /* line thickness */
+  transform-origin: center; /* scale from center */
+  transform: translate(-50%, -50%) rotate(45deg) scaleX(0);
+  transition: transform 220ms ease-out;
+
+  /* rough “pencil” texture */
+  background: repeating-linear-gradient(90deg, #cbd5e1 0 2px, #94a3b8 2px 3px);
+  box-shadow: 0 0 0.5px rgba(0, 0, 0, 0.6), 0 0 2px rgba(148, 163, 184, 0.4);
+  border-radius: 2px;
+  opacity: 0.95;
+}
+
+/* second stroke angled the other way, with a tiny delay */
+.cell .strike::after {
+  transform: translate(-50%, -50%) rotate(-45deg) scaleX(0);
+  transition-delay: 120ms;
+}
+
+/* when marked, scale the lines to full length (the rotations now stick) */
+.cell.marked .strike::before {
+  transform: translate(-50%, -50%) rotate(45deg) scaleX(1);
+}
+.cell.marked .strike::after {
+  transform: translate(-50%, -50%) rotate(-45deg) scaleX(1);
+}
+
+/* optional: reduced motion users get instant lines */
+@media (prefers-reduced-motion: reduce) {
+  .cell .strike::before,
+  .cell .strike::after {
+    transition: none;
+    transform: translate(-50%, -50%) rotate(45deg) scaleX(1);
+  }
+  .cell .strike::after {
+    transform: translate(-50%, -50%) rotate(-45deg) scaleX(1);
+  }
+}
+
+/* === Flash overlay for special tiles === */
+.image-flash {
+  position: fixed;
+  inset: 0;
+  display: none; /* shown via .show */
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45); /* transparent dark backdrop */
+  z-index: 9999;
+  cursor: pointer; /* click to dismiss early */
+}
+
+.image-flash.show {
+  display: flex;
+}
+
+/* The image that zooms in */
+.image-flash img {
+  max-width: min(85vw, 900px);
+  max-height: 85vh;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: transform 280ms ease, opacity 280ms ease;
+  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.5));
+}
+
+/* When shown, fade/zoom in */
+.image-flash.show img {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* When hiding, slightly overshoot + fade */
+.image-flash.fadeout img {
+  opacity: 0;
+  transform: scale(1.06);
+  transition-duration: 180ms;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .image-flash img {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+audio {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #0f172a; /* dark theme */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
