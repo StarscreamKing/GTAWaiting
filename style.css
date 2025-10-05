@@ -41,6 +41,15 @@ h1 {
   max-width: 720px;
   aspect-ratio: 1 / 1; /* keep the whole grid perfectly square */
 }
+
+/* On narrow screens, switch to 4 columns and adjust aspect ratio */
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    aspect-ratio: auto; /* let height grow naturally */
+  }
+}
+
 .cell {
   position: relative;
   border: 1px solid var(--border);
