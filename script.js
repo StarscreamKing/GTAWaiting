@@ -138,6 +138,9 @@ document.addEventListener("DOMContentLoaded", () => {
       div.appendChild(label);
       grid.appendChild(div);
     });
+
+    // >>> Auto-fit labels once the grid is built
+    fitAllLabels();
   }
 
   function handleClick(text, cell, btn) {
@@ -248,4 +251,52 @@ document.addEventListener("DOMContentLoaded", () => {
       flashTimer = null;
     }
   }
+
+  // -------- Auto-fit label text to each cell (mobile-friendly) --------
+  function fitLabelToCell(label, options = {}) {
+    const { minPx = 10, maxPx = 20, step = 1 } = options;
+
+    // Reset any previous inline size so we measure fresh
+    label.style.fontSize = "";
+
+    // Base starting size: current computed or maxPx
+    const computed = parseFloat(getComputedStyle(label).fontSize) || maxPx;
+    let size = Math.min(computed, maxPx);
+
+    // Ensure label can wrap and be fully measurable
+    label.style.display = "block";
+    label.style.whiteSpace = "normal";
+    label.style.maxHeight = "100%";
+    label.style.overflow = "hidden";
+
+    // Apply and shrink until it fits
+    label.style.fontSize = size + "px";
+
+    const fits = () =>
+      label.scrollHeight <= label.clientHeight &&
+      label.scrollWidth <= label.clientWidth;
+
+    while (!fits() && size > minPx) {
+      size -= step;
+      label.style.fontSize = size + "px";
+    }
+  }
+
+  function fitAllLabels() {
+    const labels = document.querySelectorAll(".cell .label");
+    labels.forEach((label) =>
+      fitLabelToCell(label, {
+        minPx: 10,
+        maxPx: 20, // bump this if you want bigger text on larger screens
+        step: 1,
+      })
+    );
+  }
+
+  // Re-fit on resize (throttled)
+  let _fitTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(_fitTimer);
+    _fitTimer = setTimeout(fitAllLabels, 100);
+  });
 });
